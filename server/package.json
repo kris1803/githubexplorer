@@ -1,0 +1,16 @@
+{
+  "name": "github-explorer-server",
+  "version": "1.0.0",
+  "description": "github explorer simple auth server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --env-file=.env index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kris1803",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^5.3.2"
+  },
+  "type": "module"
+}

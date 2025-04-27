@@ -1,65 +1,28 @@
-# Starter Template with React Navigation
+# Github Explorer APP
 
-This is a minimal starter template for React Native apps using Expo and React Navigation.
+## Architecture
 
-It includes the following:
+TODO
 
-- Example [Native Stack](https://reactnavigation.org/docs/native-stack-navigator) with a nested [Bottom Tab](https://reactnavigation.org/docs/bottom-tab-navigator)
-- Web support with [React Native for Web](https://necolas.github.io/react-native-web/)
-- TypeScript support and configured for React Navigation
-- Automatic deep link and URL handling configuration
-- Expo [Development Build](https://docs.expo.dev/develop/development-builds/introduction/) with [Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)
-- Edge-to-edge configured on Android with [`react-native-edge-to-edge`](https://www.npmjs.com/package/react-native-edge-to-edge)
+## What has been done
 
-## Getting Started
+1. The recommended Oauth approach by expo was used to authenticate users with GitHub.
+2. The device flow could also be used as in Github Documentation, but it seems to be less a standard approach and there would be need to use custom auth flow, without expo-auth-session. It could be done, but needs more time.
+3. The auth tokens are not kept in React context, due to the complexity of sync between secure store and context.
 
-1. Create a new project using this template:
+## What could be done given more time
 
-   ```sh
-   npx create-expo-app@latest --template react-navigation/template
-   ```
+1. Would have used NestJS Framework for backend with Typescript.
+2. Auth with GitLab
+3. Common exception handling in services
+4. GraphQL requests to github api
+5. Better typescript & prettier configuration
+6. Payload validation, with zod or yup
+7. Add some translations, internationalization
+8. Added some UI component styling library or created common style
 
-2. Edit the `app.json` file to configure the `name`, `slug`, `scheme` and bundle identifiers (`ios.bundleIdentifier` and `android.bundleIdentifier`) for your app.
+## Trade-offs made to meet time constraints
 
-3. Edit the `src/App.tsx` file to start working on your app.
-
-## Running the app
-
-- Install the dependencies:
-
-  ```sh
-  npm install
-  ```
-
-- Start the development server:
-
-  ```sh
-  npm start
-  ```
-
-- Build and run iOS and Android development builds:
-
-  ```sh
-  npm run ios
-  # or
-  npm run android
-  ```
-
-- In the terminal running the development server, press `i` to open the iOS simulator, `a` to open the Android device or emulator, or `w` to open the web browser.
-
-## Notes
-
-This project uses a [development build](https://docs.expo.dev/develop/development-builds/introduction/) and cannot be run with [Expo Go](https://expo.dev/go). To run the app with Expo Go, edit the `package.json` file, remove the `expo-dev-client` package and `--dev-client` flag from the `start` script. However, Edge-to-edge won't work on Expo Go.
-
-We highly recommend using the development builds for normal development and testing.
-
-The `ios` and `android` folder are gitignored in the project by default as they are automatically generated during the build process ([Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)). This means that you should not edit these folders directly and use [config plugins](https://docs.expo.dev/config-plugins/) instead. However, if you need to edit these folders, you can remove them from the `.gitignore` file so that they are tracked by git.
-
-## Resources
-
-- [React Navigation documentation](https://reactnavigation.org/)
-- [Expo documentation](https://docs.expo.dev/)
-
----
-
-Demo assets are from [lucide.dev](https://lucide.dev/)
+1. No React native Web support yet, it was not tested on web, it would need to have a logic of keeping auth tokens in react context.
+2. Basic interface, no animations or transitions, default icons...
+3. Some code was suggested by AI autocompletion. (is it a trade-off?)
