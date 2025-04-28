@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthService } from "./services/AuthService";
 import { CacheService } from "./services/CacheService";
 import { GithubService } from "./services/GithubService";
@@ -12,7 +13,7 @@ export function createServices() {
     envVariables.EXPO_PUBLIC_BACKEND_API_URL,
     envVariables.EXPO_PUBLIC_GITHUB_CLIENT_ID
   );
-  const cacheService = new CacheService();
+  const cacheService = new CacheService(AsyncStorage);
   const githubService = new GithubService(authService, cacheService);
 
   return {
