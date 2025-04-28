@@ -1,12 +1,11 @@
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import { ServicesContext } from "../../../context/ServicesContext";
 import React from "react";
 import * as AuthSession from "expo-auth-session";
-import { AuthService, GithubDiscovery } from "../../../services/AuthService";
 import * as WebBrowser from "expo-web-browser";
 
 WebBrowser.maybeCompleteAuthSession();
-const scopes: Array<string> = ["read:user"];
+const scopes: Array<string> = ["read:user", "repo"];
 
 export function useLogin() {
   const isFocused = useIsFocused();
@@ -17,11 +16,11 @@ export function useLogin() {
   const { authService, rerender } = React.useContext(ServicesContext);
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
     {
-      clientId: AuthService.GITHUB_CLIENT_ID,
+      clientId: authService.GITHUB_CLIENT_ID,
       scopes: scopes,
       redirectUri: redirectUri,
     },
-    GithubDiscovery
+    authService.GithubDiscovery
   );
 
   React.useEffect(() => {
@@ -50,7 +49,7 @@ export function useLogin() {
   }, []);
 
   return {
-    request,
+    request: !!request,
     promptAsync,
   };
 }

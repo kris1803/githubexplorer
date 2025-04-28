@@ -20,6 +20,15 @@ TODO
 6. Payload validation, with zod or yup
 7. Add some translations, internationalization
 8. Added some UI component styling library or created common style
+9. Custom hooks for common logic in screen
+10. Run CI on commit (eslint, prettier, typescript, tests...)
+
+## Scalability architecture
+
+1. Standard Oauth flow is used with a custom backend rest api, so server can be scaled horizontally.
+2. The screen logic is separated from the screen UI, so there is single responsibility principle.
+3. Frontend services are passed down with react context, so they can be easily replaced with mock services for testing, and they are all instantiated in the same place, with their dependencies & configurations.
+4. There is the GitProviderService interface, so it can be easily replaced with another service, like GitLab or Bitbucket.
 
 ## Trade-offs made to meet time constraints
 

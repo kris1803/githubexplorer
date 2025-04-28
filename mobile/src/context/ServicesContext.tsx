@@ -1,18 +1,5 @@
 import React from "react";
-import { AuthService } from "../services/AuthService";
-import { GithubService } from "../services/GithubService";
-import { CacheService } from "../services/CacheService";
-
-function createServices() {
-  const authService = new AuthService(process.env.EXPO_PUBLIC_BACKEND_API_URL!);
-  const cacheService = new CacheService();
-  const githubService = new GithubService(authService, cacheService);
-  return {
-    authService,
-    githubService,
-    cacheService,
-  };
-}
+import { createServices } from "../configuration";
 
 const services = createServices();
 export const ServicesContext = React.createContext({

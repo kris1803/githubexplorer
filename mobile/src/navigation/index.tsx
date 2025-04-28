@@ -12,6 +12,7 @@ import { LoginScreen } from "./screens/Login/Login";
 import React from "react";
 import { ServicesContext } from "../context/ServicesContext";
 import * as SplashScreen from "expo-splash-screen";
+import { RepoDetailsScreen } from "./screens/RepoDetails/RepoDetails";
 
 const HomeTabsNavigator = createBottomTabNavigator();
 
@@ -54,7 +55,14 @@ function HomeTabs() {
   );
 }
 
-const RootStack = createNativeStackNavigator();
+type RootStackParamList = {
+  Auth: undefined;
+  HomeTabs: undefined;
+  RepoDetails: { name: string };
+  "*": undefined;
+};
+
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export const Navigation = () => {
   const { authService } = React.useContext(ServicesContext);
@@ -80,8 +88,13 @@ export const Navigation = () => {
           <>
             <RootStack.Screen name="HomeTabs" component={HomeTabs} />
             <RootStack.Screen
+              name="RepoDetails"
+              component={RepoDetailsScreen}
+              options={{ headerShown: true }}
+            />
+            <RootStack.Screen
               name="*"
-              options={{ title: "Not Found" }}
+              options={{ title: "Not Found", headerShown: true }}
               component={NotFound}
             />
           </>
@@ -90,8 +103,6 @@ export const Navigation = () => {
     </NavigationContainer>
   );
 };
-
-type RootStackParamList = StaticParamList<typeof RootStack>;
 
 declare global {
   namespace ReactNavigation {

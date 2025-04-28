@@ -10,7 +10,7 @@ export function LoginScreen() {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.safearea}>
-        <Text>Github Explorer</Text>
+        <Text style={{ fontSize: 20 }}>Github Explorer</Text>
         <Button
           title="Login"
           accessibilityLabel="Login button"

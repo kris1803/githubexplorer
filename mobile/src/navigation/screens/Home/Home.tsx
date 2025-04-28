@@ -5,26 +5,46 @@ import { useHome } from "./useHome";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 
 export function Home() {
-  const { repositories, onPullRefresh } = useHome();
+  const { repositories, onPullRefresh, handleRepositoryClick } = useHome();
 
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <Text>Repositories</Text>
+        <Text style={{ fontSize: 20, marginTop: 10 }}>Repositories</Text>
         <FlatList
           style={{ flex: 1, width: "100%" }}
           data={repositories}
-          renderItem={(data) => (
+          renderItem={({ item, index }) => (
             <TouchableOpacity
               style={{
                 width: "100%",
-                padding: 10,
-                gap: 8,
+                paddingHorizontal: 10,
+                paddingVertical: 20,
+                gap: 5,
+                borderStyle: "solid",
+                borderColor: "#ddd",
+                borderTopWidth: index === 0 ? 1 : undefined,
+                borderBottomWidth: 1,
               }}
-              onPress={() => {}}
+              key={item.name}
+              onPress={() => handleRepositoryClick(item.name)}
             >
-              <Text style={{ fontSize: 20 }}>{data.item.name}</Text>
-              <Text>by {data.item.owner.login}</Text>
+              <Text style={{ fontSize: 20 }}>{item.name}</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text>by {item.owner.login}</Text>
+                <Text style={{ fontWeight: 600 }}>
+                  {item.private ? "Private" : "Public"}
+                </Text>
+              </View>
+              <View>
+                <Text>Stars: {item.stargazers_count}</Text>
+                <Text>Lang: {item.language}</Text>
+              </View>
             </TouchableOpacity>
           )}
           refreshControl={

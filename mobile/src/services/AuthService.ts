@@ -1,16 +1,22 @@
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
+import * as AuthSession from "expo-auth-session";
 
 export class AuthService {
   private static ACCESS_TOKEN_KEY = "access_token";
   private static REFRESH_TOKEN_KEY = "refresh_token";
   private static EXPIRES_AT = "expires_at";
   private static REFRESH_TOKEN_EXPIRES_AT = "refresh_token_expires_at";
-  public static GITHUB_CLIENT_ID = process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID;
+  public readonly GithubDiscovery: AuthSession.DiscoveryDocument;
 
   public isSignedIn: boolean = false;
 
-  constructor(private readonly backendUrl: string) {}
+  constructor(
+    private readonly backendUrl: string,
+    public readonly GITHUB_CLIENT_ID: string
+  ) {
+    this.GithubDiscovery = getGithubDiscovery(GITHUB_CLIENT_ID);
+  }
 
   async exchangeGithubCode(code: string) {
     try {
@@ -115,11 +121,13 @@ export class AuthService {
   }
 }
 
-export const GithubDiscovery = {
-  authorizationEndpoint: "https://github.com/login/oauth/authorize",
-  tokenEndpoint: "https://github.com/login/oauth/access_token",
-  revocationEndpoint: `https://github.com/settings/connections/applications/${AuthService.GITHUB_CLIENT_ID}`,
-};
+function getGithubDiscovery(clientId: string) {
+  return {
+    authorizationEndpoint: "https://github.com/login/oauth/authorize",
+    tokenEndpoint: "https://github.com/login/oauth/access_token",
+    revocationEndpoint: `https://github.com/settings/connections/applications/${clientId}`,
+  };
+}
 
 type ReceivedTokenPayload = {
   access_token: string;

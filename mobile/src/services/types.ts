@@ -1,5 +1,10 @@
 export interface GitProviderService {
   getRepositories(abortSignal: AbortSignal): Promise<Array<GitRepository>>;
+  getWeeklyCommitCount(
+    abortSignal: AbortSignal,
+    repoOwner: string,
+    repoName: string
+  ): Promise<any>;
 }
 
 export type GitRepository = {
@@ -38,4 +43,9 @@ export type GitRepository = {
     url: string;
     user_view_type: "public";
   };
+};
+
+export type WeeklyCommitCount = {
+  all: number[];
+  owner: number[];
 };

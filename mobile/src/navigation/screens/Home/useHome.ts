@@ -1,11 +1,13 @@
 import React from "react";
 import { ServicesContext } from "../../../context/ServicesContext";
 import { GitRepository } from "../../../services/types";
+import { useNavigation } from "@react-navigation/native";
 
 export function useHome() {
   const { githubService } = React.useContext(ServicesContext);
   const [repositories, setRepositories] = React.useState<GitRepository[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const navigation = useNavigation();
 
   function refreshRepositories(
     abortController: AbortController,
@@ -28,6 +30,10 @@ export function useHome() {
     );
   }
 
+  function handleRepositoryClick(repoName: string) {
+    navigation.navigate("RepoDetails", { name: repoName });
+  }
+
   React.useEffect(() => {
     const abortController = new AbortController();
     refreshRepositories(abortController);
@@ -36,5 +42,10 @@ export function useHome() {
     };
   }, []);
 
-  return { repositories, onPullRefresh, isRefreshing: isLoading };
+  return {
+    repositories,
+    onPullRefresh,
+    isRefreshing: isLoading,
+    handleRepositoryClick,
+  };
 }
