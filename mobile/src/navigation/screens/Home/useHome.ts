@@ -7,6 +7,7 @@ export function useHome() {
   const { githubService } = React.useContext(ServicesContext);
   const [repositories, setRepositories] = React.useState<GitRepository[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [search, setSearch] = React.useState<string>("");
   const navigation = useNavigation();
 
   function refreshRepositories(
@@ -20,6 +21,10 @@ export function useHome() {
         alert(`Error fetching repositories: ${error?.message || ""}`);
         console.error("Error fetching repositories:", error);
       });
+  }
+
+  function onInput(text: string) {
+    setSearch(text);
   }
 
   function onPullRefresh() {
@@ -36,16 +41,25 @@ export function useHome() {
 
   React.useEffect(() => {
     const abortController = new AbortController();
-    refreshRepositories(abortController);
+    setIsLoading(true);
+    refreshRepositories(abortController).finally(() => setIsLoading(false));
     return () => {
       abortController.abort();
     };
   }, []);
 
+  const filteredRepositories = React.useMemo(() => {
+    const lowerSearch = search.toLowerCase();
+    return repositories.filter((repo) =>
+      repo.name.toLowerCase().includes(lowerSearch)
+    );
+  }, [repositories, search]);
+
   return {
-    repositories,
+    repositories: filteredRepositories,
     onPullRefresh,
     isRefreshing: isLoading,
     handleRepositoryClick,
+    onInput,
   };
 }

@@ -2,15 +2,37 @@ import { StyleSheet, View, Text, RefreshControl } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useHome } from "./useHome";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 
 export function Home() {
-  const { repositories, onPullRefresh, handleRepositoryClick } = useHome();
+  const {
+    repositories,
+    onPullRefresh,
+    handleRepositoryClick,
+    onInput,
+    isRefreshing,
+  } = useHome();
 
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <Text style={{ fontSize: 20, marginTop: 10 }}>Repositories</Text>
+        <TextInput
+          style={{
+            width: "90%",
+            padding: 5,
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderColor: "#ddd",
+          }}
+          placeholder="Search by name..."
+          onChangeText={onInput}
+        />
+        {isRefreshing && <Text>Loading...</Text>}
         <FlatList
           style={{ flex: 1, width: "100%" }}
           data={repositories}
