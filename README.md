@@ -6,7 +6,25 @@ The Url seems suspicious but it is Microsoft Onedrive that gives this
 
 ## Architecture
 
-TODO
+### Frontend app
+
+The main file App.tsx is start point for React.
+
+It includes a provider for services needed by components, acting like a dependency injection. It uses React Context.
+
+The navigation routing is in navigation/index.tsx, and the screens in the respective directory.
+
+The screens are in separate folders, with a file for UI and a file for the screen logic, declared as a React custom hook, to follow single responsibility principle.
+
+Common or Reusable components are kept in src/components.
+
+The API services or utility services are kept in src/services.
+
+They are declared as classes so the dependencies can be injected when testing. (excepted the AuthService, heavily depending on Expo)
+
+### Server
+
+For now, it is a simple http server with Fastify in one single file without typescript, to be faster in development.
 
 ## What has been done
 

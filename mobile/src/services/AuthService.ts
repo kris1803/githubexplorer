@@ -1,19 +1,20 @@
-import * as SecureStore from "expo-secure-store";
+import type SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
-import * as AuthSession from "expo-auth-session";
+import type { DiscoveryDocument } from "expo-auth-session";
 
 export class AuthService {
   private static ACCESS_TOKEN_KEY = "access_token";
   private static REFRESH_TOKEN_KEY = "refresh_token";
   private static EXPIRES_AT = "expires_at";
   private static REFRESH_TOKEN_EXPIRES_AT = "refresh_token_expires_at";
-  public readonly GithubDiscovery: AuthSession.DiscoveryDocument;
+  public readonly GithubDiscovery: DiscoveryDocument;
 
   public isSignedIn: boolean = false;
 
   constructor(
     private readonly backendUrl: string,
-    public readonly GITHUB_CLIENT_ID: string
+    public readonly GITHUB_CLIENT_ID: string,
+    private readonly secureStore: typeof SecureStore
   ) {
     this.GithubDiscovery = getGithubDiscovery(GITHUB_CLIENT_ID);
   }
@@ -40,19 +41,19 @@ export class AuthService {
         throw new Error(receivedPayload.error);
       }
       if (Platform.OS !== "web") {
-        await SecureStore.setItemAsync(
+        await this.secureStore.setItemAsync(
           AuthService.ACCESS_TOKEN_KEY,
           receivedPayload.access_token
         );
-        await SecureStore.setItemAsync(
+        await this.secureStore.setItemAsync(
           AuthService.REFRESH_TOKEN_KEY,
           receivedPayload.refresh_token
         );
-        await SecureStore.setItemAsync(
+        await this.secureStore.setItemAsync(
           AuthService.EXPIRES_AT,
           `${new Date().getTime() + receivedPayload.expires_in * 1000}`
         );
-        await SecureStore.setItemAsync(
+        await this.secureStore.setItemAsync(
           AuthService.REFRESH_TOKEN_EXPIRES_AT,
           `${
             new Date().getTime() +
@@ -67,30 +68,34 @@ export class AuthService {
   }
 
   async readStoredTokens(): Promise<TokenPayload> {
-    const access_token = await SecureStore.getItemAsync(
+    const access_token = await this.secureStore.getItemAsync(
       AuthService.ACCESS_TOKEN_KEY
     );
-    const refresh_token = await SecureStore.getItemAsync(
+    const refresh_token = await this.secureStore.getItemAsync(
       AuthService.REFRESH_TOKEN_KEY
     );
     if (!access_token || !refresh_token) {
       throw new Error("No tokens found");
     }
-    const expiresAt = await SecureStore.getItemAsync(AuthService.EXPIRES_AT);
-    const refreshTokenExpiresAt = await SecureStore.getItemAsync(
+    const expiresAt = await this.secureStore.getItemAsync(
+      AuthService.EXPIRES_AT
+    );
+    const refreshTokenExpiresAt = await this.secureStore.getItemAsync(
       AuthService.REFRESH_TOKEN_EXPIRES_AT
     );
     if (expiresAt && new Date().getTime() > parseInt(expiresAt)) {
-      await SecureStore.deleteItemAsync(AuthService.ACCESS_TOKEN_KEY);
-      await SecureStore.deleteItemAsync(AuthService.EXPIRES_AT);
+      await this.secureStore.deleteItemAsync(AuthService.ACCESS_TOKEN_KEY);
+      await this.secureStore.deleteItemAsync(AuthService.EXPIRES_AT);
       throw new Error("Access token expired");
     }
     if (
       refreshTokenExpiresAt &&
       new Date().getTime() > parseInt(refreshTokenExpiresAt)
     ) {
-      await SecureStore.deleteItemAsync(AuthService.REFRESH_TOKEN_KEY);
-      await SecureStore.deleteItemAsync(AuthService.REFRESH_TOKEN_EXPIRES_AT);
+      await this.secureStore.deleteItemAsync(AuthService.REFRESH_TOKEN_KEY);
+      await this.secureStore.deleteItemAsync(
+        AuthService.REFRESH_TOKEN_EXPIRES_AT
+      );
       throw new Error("Refresh token expired");
     }
 
@@ -113,10 +118,12 @@ export class AuthService {
   }
 
   async signOut(): Promise<void> {
-    await SecureStore.deleteItemAsync(AuthService.ACCESS_TOKEN_KEY);
-    await SecureStore.deleteItemAsync(AuthService.REFRESH_TOKEN_KEY);
-    await SecureStore.deleteItemAsync(AuthService.EXPIRES_AT);
-    await SecureStore.deleteItemAsync(AuthService.REFRESH_TOKEN_EXPIRES_AT);
+    await this.secureStore.deleteItemAsync(AuthService.ACCESS_TOKEN_KEY);
+    await this.secureStore.deleteItemAsync(AuthService.REFRESH_TOKEN_KEY);
+    await this.secureStore.deleteItemAsync(AuthService.EXPIRES_AT);
+    await this.secureStore.deleteItemAsync(
+      AuthService.REFRESH_TOKEN_EXPIRES_AT
+    );
     this.isSignedIn = false;
   }
 }
