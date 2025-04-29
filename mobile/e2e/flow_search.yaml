@@ -1,0 +1,9 @@
+# should be authentified already
+appId: com.githubexplorer
+---
+- launchApp
+- assertVisible: "Search by name..."
+- tapOn: "Search by name..."
+- inputText: "Hello, Maestro!"
+- assertVisible: "Nothing was found"
+- killApp

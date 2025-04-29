@@ -33,6 +33,7 @@ function HomeTabs() {
               }}
             />
           ),
+          tabBarAccessibilityLabel: "Home",
         }}
       />
       <HomeTabsNavigator.Screen
@@ -49,6 +50,7 @@ function HomeTabs() {
               }}
             />
           ),
+          tabBarAccessibilityLabel: "Settings",
         }}
       />
     </HomeTabsNavigator.Navigator>

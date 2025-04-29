@@ -2,11 +2,7 @@ import { StyleSheet, View, Text, RefreshControl } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useHome } from "./useHome";
-import {
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import { RepoListCard } from "../../../components/RepoListCard";
 import { SearchInput } from "../../../components/SearchInput";
 
@@ -25,6 +21,9 @@ export function Home() {
         <Text style={{ fontSize: 20, marginTop: 10 }}>Repositories</Text>
         <SearchInput onInput={onInput} placeholder="Search by name..." />
         {isRefreshing && <Text>Loading...</Text>}
+        {!isRefreshing && !repositories.length ? (
+          <Text>Nothing was found</Text>
+        ) : null}
         <FlatList
           style={{ flex: 1, width: "100%" }}
           data={repositories}

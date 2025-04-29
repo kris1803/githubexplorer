@@ -1,5 +1,9 @@
 # Github Explorer APP
 
+Demonstration screen recording : <https://1drv.ms/v/s!ApBIzeB8f5mmqnY9a_dqlmyju-4b?e=aSJEya>
+
+The Url seems suspicious but it is Microsoft Onedrive that gives this
+
 ## Architecture
 
 TODO
@@ -22,6 +26,7 @@ TODO
 8. Added some UI component styling library or created common style
 9. Custom hooks for common logic in screen
 10. Run CI on commit (eslint, prettier, typescript, tests...)
+11. Put e2e test runner Maestro in Docker as in their docs
 
 ## Scalability architecture
 
@@ -35,3 +40,4 @@ TODO
 1. No React native Web support yet, it was not tested on web, it would need to have a logic of keeping auth tokens in react context.
 2. Basic interface, no animations or transitions, default icons...
 3. Some code was suggested by AI autocompletion. (is it a trade-off?)
+4. Used Expo for react native instead of bare react native

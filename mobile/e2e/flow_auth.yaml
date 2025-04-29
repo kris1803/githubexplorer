@@ -1,0 +1,15 @@
+# should have configured github login in browser before, so it shows only a button
+# should be LOGGED OUT when running
+# !!! PRESS CONTINUE when ios asks permissions to open browser
+appId: com.githubexplorer
+---
+- launchApp
+- assertVisible: "Login"
+- tapOn: "Login"
+- assertVisible: "Continue"
+- tapOn: "Continue"
+- assertVisible: "Repositories"
+- tapOn: "Settings"
+- tapOn: "Logout"
+- assertVisible: "Login"
+- killApp

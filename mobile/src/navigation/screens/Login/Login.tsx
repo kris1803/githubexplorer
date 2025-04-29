@@ -13,7 +13,7 @@ export function LoginScreen() {
         <Text style={{ fontSize: 20 }}>Github Explorer</Text>
         <Button
           title="Login"
-          accessibilityLabel="Login button"
+          accessibilityLabel="Login"
           onPress={() => promptAsync()}
           disabled={!request}
         />
